@@ -1,6 +1,7 @@
 # offic3
 
-App dedicated to usage of our holy temple.
+This app's main goal is providing ease at keeping the accounts of the small cafe or restaurants.
+It is still at process of development.
 
 ## Getting Started
 
