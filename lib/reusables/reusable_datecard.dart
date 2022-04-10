@@ -1,11 +1,11 @@
 
 import 'package:flutter/material.dart';
-import 'package:offic3/constants_globalmethods.dart';
+import 'package:offic3/constants_globals.dart';
 
 class ReusableCard1 extends StatelessWidget {
-  const ReusableCard1({required this.datetxt});
+  ReusableCard1({Key? key, required this.datetxt}) : super(key: key);
 
-  final String datetxt;
+  String datetxt;
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +32,9 @@ class ReusableCard1 extends StatelessWidget {
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
-            children: const [
+            children: [
               IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.delete,
                   color: kColor1,
                 ),
@@ -42,11 +42,11 @@ class ReusableCard1 extends StatelessWidget {
               ),
               IconButton(
                 iconSize: 25,
-                icon: Icon(
+                icon: const Icon(
                   Icons.mode_outlined,
                   color: kColor1,
                 ),
-                onPressed: null,
+                onPressed: null
               ),
               IconButton(
                 iconSize: 32,

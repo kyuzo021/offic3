@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:offic3/constants_globalmethods.dart';
-import 'screens/date_screen.dart';
+import 'package:offic3/constants_globals.dart';
+import 'package:offic3/screens/welcome_screen.dart';
 
 void main() {
-  runApp(const OfficePage());
+  runApp(const Offic3());
 }
 
-class OfficePage extends StatelessWidget {
-  const OfficePage({Key? key}) : super(key: key);
+class Offic3 extends StatelessWidget {
+  const Offic3({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class OfficePage extends StatelessWidget {
         primaryColor: kColor1,
         scaffoldBackgroundColor: kColor1,
       ),
-      home: const DayPage(),
+      home: const WelcomeScreen(),
     );
   }
 }

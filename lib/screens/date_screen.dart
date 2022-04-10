@@ -1,21 +1,19 @@
-
 import 'package:offic3/reusables/reusable_datecard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:offic3/constants_globalmethods.dart';
+import 'package:offic3/constants_globals.dart';
 
-class DayPage extends StatefulWidget {
-  const DayPage({Key? key}) : super(key: key);
+class DateScreen extends StatefulWidget {
+  const DateScreen({Key? key}) : super(key: key);
 
   @override
   _PrimaryScreenState createState() => _PrimaryScreenState();
 }
 
-class _PrimaryScreenState extends State<DayPage> {
+class _PrimaryScreenState extends State<DateScreen> {
   late String futureDate = '00.00.0000';
 
-  List <ReusableCard1> datePageList = [];
-
+  List<ReusableCard1> datePageList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -48,12 +46,15 @@ class _PrimaryScreenState extends State<DayPage> {
                 onSubmitted: (String value) {
                   setState(() {
                     futureDate = value;
-                    datePageList.add(ReusableCard1(datetxt: futureDate));
+                    datePageList.add(
+                      ReusableCard1(
+                        datetxt: futureDate,
+                      ),
+                    );
                   });
                 },
-                decoration: const InputDecoration(
-                  labelText: 'Example: 13.12.1996'
-                ),
+                decoration:
+                    const InputDecoration(labelText: 'Example: 13.12.1996'),
               ),
               actions: [
                 TextButton(
@@ -73,3 +74,4 @@ class _PrimaryScreenState extends State<DayPage> {
     );
   }
 }
+

@@ -19,7 +19,7 @@ const kStandardEdging = EdgeInsets.only(top: 5.0, bottom: 5.0, left: 5.0, right:
 //Global Text Styles
 const kLabelTextStyle = TextStyle(
   fontFamily: 'SourceCodePro',
-  fontSize: 25,
+  fontSize: 20,
   color: kColor4,
 );
 
