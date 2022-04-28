@@ -1,19 +1,19 @@
-import 'package:offic3/reusables/reusable_datecard.dart';
+import 'package:offic3/reusables/reusable_daylistcard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:offic3/constants_globals.dart';
 
-class DateScreen extends StatefulWidget {
-  const DateScreen({Key? key}) : super(key: key);
+class DayListScreen extends StatefulWidget {
+  const DayListScreen({Key? key}) : super(key: key);
 
   @override
   _PrimaryScreenState createState() => _PrimaryScreenState();
 }
 
-class _PrimaryScreenState extends State<DateScreen> {
-  late String futureDate = '00.00.0000';
+class _PrimaryScreenState extends State<DayListScreen> {
 
-  List<ReusableCard1> datePageList = [];
+  late String futureDate;
+  List<ReusableDayCard> dayPageList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class _PrimaryScreenState extends State<DateScreen> {
       appBar: AppBar(
         backgroundColor: kColor1,
         title: const Text(
-          'Date Screen',
+          'Day Screen',
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
@@ -40,15 +40,16 @@ class _PrimaryScreenState extends State<DateScreen> {
             barrierDismissible: false,
             builder: (BuildContext context) => AlertDialog(
               backgroundColor: kColor1,
-              title: const Text('Write a date.'),
+              title: const Text('Write a date of the day.'),
               content: TextField(
                 keyboardType: TextInputType.number,
                 onSubmitted: (String value) {
                   setState(() {
                     futureDate = value;
-                    datePageList.add(
-                      ReusableCard1(
-                        datetxt: futureDate,
+                    dayPageList.add(
+                      ReusableDayCard(
+                        dateInput: futureDate,
+                        index: dayPageList.length,
                       ),
                     );
                   });
@@ -68,10 +69,9 @@ class _PrimaryScreenState extends State<DateScreen> {
           );
         },
       ),
-      body: Column(
-        children: datePageList,
+      body: ListView(
+        children: dayPageList,
       ),
     );
   }
 }
-

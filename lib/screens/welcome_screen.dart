@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:offic3/constants_globals.dart';
-import 'package:offic3/screens/date_screen.dart';
+import 'package:offic3/screens/daylist_screen.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
@@ -19,7 +19,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       const Duration(seconds: 3),
         () =>
             Navigator.of(context).pushReplacement(MaterialPageRoute(
-              builder: (BuildContext context) => const DateScreen()
+              builder: (BuildContext context) => const DayListScreen()
             ))
     );
 

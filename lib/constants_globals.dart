@@ -8,8 +8,8 @@ const kColor4 = Color(0xFFEDEDED);
 
 
 const kStandardPadding = EdgeInsetsDirectional.only(
-  top: 3.0,
-  bottom: 3.0,
+  top: 8.0,
+  bottom: 8.0,
   start: 20.0,
 );
 
@@ -26,5 +26,12 @@ const kLabelTextStyle = TextStyle(
 const kStandardTextStyle = TextStyle(
   fontFamily: 'SourceCodePro',
   fontSize: 15,
+  color: kColor4,
+);
+
+const kLabelTextStyle2 = TextStyle(
+  fontFamily: 'SourceCodePro',
+  fontSize: 22,
+  fontWeight: FontWeight.w900,
   color: kColor4,
 );
