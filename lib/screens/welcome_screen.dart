@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:offic3/constants_globals.dart';
+import 'package:offic3/consts,%20globals/constants_globals.dart';
 import 'package:offic3/screens/daylist_screen.dart';
 
 class WelcomeScreen extends StatefulWidget {

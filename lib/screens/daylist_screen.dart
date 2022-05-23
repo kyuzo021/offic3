@@ -1,7 +1,7 @@
 import 'package:offic3/reusables/reusable_daylistcard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:offic3/constants_globals.dart';
+import 'package:offic3/consts,%20globals/constants_globals.dart';
 
 class DayListScreen extends StatefulWidget {
   const DayListScreen({Key? key}) : super(key: key);
@@ -13,7 +13,7 @@ class DayListScreen extends StatefulWidget {
 class _PrimaryScreenState extends State<DayListScreen> {
 
   late String futureDate;
-  List<ReusableDayCard> dayPageList = [];
+  List<ReusableDayListCard> dayPageList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +47,7 @@ class _PrimaryScreenState extends State<DayListScreen> {
                   setState(() {
                     futureDate = value;
                     dayPageList.add(
-                      ReusableDayCard(
+                      ReusableDayListCard(
                         dateInput: futureDate,
                         index: dayPageList.length,
                       ),

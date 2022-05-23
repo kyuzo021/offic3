@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:offic3/constants_globals.dart';
+import 'package:offic3/consts,%20globals/constants_globals.dart';
 import 'package:offic3/screens/welcome_screen.dart';
 
 void main() {

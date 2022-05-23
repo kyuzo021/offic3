@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:offic3/constants_globals.dart';
-import 'package:offic3/reusables/reusable_clientoverviewcard.dart';
+import 'package:offic3/consts,%20globals/constants_globals.dart';
+import 'package:offic3/reusables/reusable_clientlistcard.dart';
 
-class ClientOverviewScreen extends StatefulWidget {
-  const ClientOverviewScreen(
+class ClientListScreen extends StatefulWidget {
+  const ClientListScreen(
       {Key? key, required this.index2, required this.dateForClientScreen})
       : super(key: key);
 
@@ -15,9 +15,9 @@ class ClientOverviewScreen extends StatefulWidget {
   _PrimaryScreenState createState() => _PrimaryScreenState();
 }
 
-class _PrimaryScreenState extends State<ClientOverviewScreen> {
+class _PrimaryScreenState extends State<ClientListScreen> {
   late String futureClient;
-  List<ClientOverviewCard> clientOverviewList = [];
+  List<ReusableClientListCard> clientOverviewList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +45,7 @@ class _PrimaryScreenState extends State<ClientOverviewScreen> {
                   setState(() {
                     futureClient = value;
                     clientOverviewList.add(
-                      ClientOverviewCard(
+                      ReusableClientListCard(
                         clientNameInput: futureClient,
                         index2: clientOverviewList.length,
                       ),

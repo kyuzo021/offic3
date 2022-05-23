@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:offic3/constants_globals.dart';
-import 'package:offic3/screens/client_overview_screen.dart';
+import 'package:offic3/consts,%20globals/constants_globals.dart';
+import 'package:offic3/screens/clientlist_screen.dart';
 
-class ReusableDayCard extends StatelessWidget {
-  const ReusableDayCard({Key? key, required this.dateInput, required this.index})
+class ReusableDayListCard extends StatelessWidget {
+  const ReusableDayListCard({Key? key, required this.dateInput, required this.index})
       : super(key: key);
 
   final String dateInput;
@@ -16,7 +16,7 @@ class ReusableDayCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ClientOverviewScreen(
+            builder: (context) => ClientListScreen(
               index2: index,
               dateForClientScreen: dateInput,
             ),

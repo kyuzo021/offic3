@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:offic3/constants_globals.dart';
+import 'package:offic3/consts,%20globals/constants_globals.dart';
 import 'package:offic3/screens/client_screen.dart';
 
-class ClientOverviewCard extends StatelessWidget {
-  const ClientOverviewCard({Key? key, required this.clientNameInput, required this.index2})
+class ReusableClientListCard extends StatelessWidget {
+  const ReusableClientListCard({Key? key, required this.clientNameInput, required this.index2})
       : super(key: key);
 
   final String clientNameInput;
