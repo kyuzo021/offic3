@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:offic3/consts,%20globals/constants_globals.dart';
 import 'package:offic3/screens/clientlist_screen.dart';
@@ -32,9 +33,22 @@ class ReusableDayListCard extends StatelessWidget {
         width: double.infinity,
         alignment: Alignment.center,
         padding: kStandardPadding,
-        child: Text(
-          dateInput,
-          style: kLabelTextStyle,
+        child: Column(
+          children: [
+            Text(
+              "Date: $dateInput",
+              style: kLabelTextStyle2,
+            ),
+            SizedBox(height: 5,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Total:130\$", style: kStandardTextStyle3,),
+                SizedBox(width: 20,),
+                Text("Charged:Yes/No", style: kStandardTextStyle3,),
+              ],
+            ),
+          ],
         ),
       ),
     );

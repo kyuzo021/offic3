@@ -8,11 +8,13 @@ class ReusableClientCard extends StatefulWidget {
       required this.productname,
       required this.unitprice,
       required this.indexForclientcard,
-      required this.delete})
+      required this.delete,
+      required this.totalpricefunc})
       : super(key: key);
 
+  final void Function(double) totalpricefunc;
   final String productname;
-  final int unitprice;
+  final double unitprice;
   int indexForclientcard;
   final void Function(int) delete;
 
@@ -23,7 +25,7 @@ class ReusableClientCard extends StatefulWidget {
 class _ReusableClientCardState extends State<ReusableClientCard> {
   int productcount = 0;
 
-  totalpricecalculator() {
+  double totalPriceCalculator() {
     return productcount * widget.unitprice;
   }
 
@@ -57,7 +59,7 @@ class _ReusableClientCardState extends State<ReusableClientCard> {
           ),
           const SizedBox(height: 7),
           Text(
-            "Total Price: ${totalpricecalculator()}\$",
+            "Total Price: ${totalPriceCalculator().toStringAsFixed(2)}\$",
             style: kStandardTextStyle4,
           ),
           const SizedBox(height: 5),
@@ -74,6 +76,7 @@ class _ReusableClientCardState extends State<ReusableClientCard> {
                   onPressed: () {
                     setState(() {
                       productcount += 1;
+                      widget.totalpricefunc(widget.unitprice);
                     });
                   },
                   child: const Icon(
@@ -88,6 +91,9 @@ class _ReusableClientCardState extends State<ReusableClientCard> {
                 TextButton(
                   onPressed: () {
                     setState(() {
+                      if(productcount != 0){
+                        widget.totalpricefunc(-widget.unitprice);
+                      }
                       productcount == 0 ? productcount -= 0 : productcount -= 1;
                     });
                   },
@@ -102,6 +108,7 @@ class _ReusableClientCardState extends State<ReusableClientCard> {
                 ),
                 TextButton(
                   onPressed: () {
+                      widget.totalpricefunc(-(productcount * widget.unitprice));
                       widget.delete(widget.indexForclientcard);
                   },
                   child: const Icon(

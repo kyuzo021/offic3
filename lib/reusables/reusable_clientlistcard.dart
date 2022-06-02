@@ -29,13 +29,26 @@ class ReusableClientListCard extends StatelessWidget {
           color: kColor2,
         ),
         margin: kStandardEdging,
-        width: double.infinity,
-        alignment: Alignment.center,
+        // width: double.infinity,
+        // alignment: Alignment.center,
         padding: kStandardPadding,
-        child: Text(
-          clientNameInput,
-          style: kLabelTextStyle,
-        ),
+        child: Column(
+          children: [
+                Text(
+                  clientNameInput,
+                  style: kLabelTextStyle,
+                ),
+            SizedBox(height: 7,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Total:132", style: kStandardTextStyle2,),
+                SizedBox(width: 20,),
+                Text("Charged:Yes", style: kStandardTextStyle2,),
+              ],
+            ),
+          ],
+        )
       ),
     );
   }

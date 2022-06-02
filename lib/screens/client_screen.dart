@@ -17,6 +17,15 @@ class ClientScreen extends StatefulWidget {
 class _PrimaryScreenState extends State<ClientScreen> {
   //variable for is bill paid button.
   late bool isBillPaid = false;
+
+  late double totalCheck = 0;
+
+  void sumCheck(double value) {
+    totalCheck += value;
+    setState(() {});
+  }
+
+  //client list that is getting printed on the screen.
   List<ReusableClientCard> clientList = [];
 
   //variables for floating action button.
@@ -31,22 +40,25 @@ class _PrimaryScreenState extends State<ClientScreen> {
         clientList[i].indexForclientcard = clientList[i].indexForclientcard - 1;
       }
       setState(() {});
-      print(clientList.length);
     }
   }
 
   //This adds tea and water automatically when the screen gets created.
   void initState() {
     clientList.add(ReusableClientCard(
-        productname: "TEA",
-        unitprice: 2,
-        indexForclientcard: clientList.length,
-        delete: deleteReusable));
+      productname: "TEA",
+      unitprice: 2,
+      indexForclientcard: clientList.length,
+      delete: deleteReusable,
+      totalpricefunc: sumCheck,
+    ));
     clientList.add(ReusableClientCard(
-        productname: "Water",
-        unitprice: 1,
-        indexForclientcard: clientList.length,
-        delete: deleteReusable));
+      productname: "WATER",
+      unitprice: 1,
+      indexForclientcard: clientList.length,
+      delete: deleteReusable,
+      totalpricefunc: sumCheck,
+    ));
   }
 
   @override
@@ -74,17 +86,15 @@ class _PrimaryScreenState extends State<ClientScreen> {
                 children: [
                   TextField(
                     keyboardType: TextInputType.text,
-                    onSubmitted: (String value) {
-                      setState(() {
-                        productName = value;
-                      });
+                    onChanged: (String value) {
+                      productName = value;
                     },
                     decoration:
                         const InputDecoration(labelText: 'Product\'s name.'),
                   ),
                   TextField(
                     keyboardType: TextInputType.number,
-                    onSubmitted: (String value) {
+                    onChanged: (String value) {
                       setState(() {
                         productPrice = value;
                       });
@@ -101,9 +111,10 @@ class _PrimaryScreenState extends State<ClientScreen> {
                       clientList.add(
                         ReusableClientCard(
                           productname: productName,
-                          unitprice: int.parse(productPrice),
+                          unitprice: double.parse(productPrice),
                           indexForclientcard: clientList.length,
                           delete: deleteReusable,
+                          totalpricefunc: sumCheck,
                         ),
                       );
                     });
@@ -138,8 +149,8 @@ class _PrimaryScreenState extends State<ClientScreen> {
                   const SizedBox(height: 1),
                   const Text('Overview', style: kStandardTextStyle2),
                   const SizedBox(height: 3),
-                  const Text(
-                    'Client\'s Total Check: -',
+                  Text(
+                    'Client\'s Total Check: ${totalCheck.toStringAsFixed(2)} \$',
                     style: kStandardTextStyle2,
                   ),
                   const SizedBox(height: 3),

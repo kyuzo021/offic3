@@ -3,11 +3,11 @@ import 'package:offic3/consts,%20globals/constants_globals.dart';
 import 'package:offic3/screens/welcome_screen.dart';
 
 void main() {
-  runApp(const Offic3());
+  runApp(const MyApp());
 }
 
-class Offic3 extends StatelessWidget {
-  const Offic3({Key? key}) : super(key: key);
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

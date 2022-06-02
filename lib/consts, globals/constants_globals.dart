@@ -31,6 +31,13 @@ const kLabelTextStyle2 = TextStyle(
   color: kColor4,
 );
 
+const kLabelTextStyle3 = TextStyle(
+  fontFamily: 'SourceCodePro',
+  fontSize: 18,
+  fontWeight: FontWeight.w900,
+  color: kColor4,
+);
+
 //Global Text Styles
 
 const kStandardTextStyle = TextStyle(
