@@ -49,7 +49,7 @@ class _PrimaryScreenState extends State<DayListScreen> {
                     dayPageList.add(
                       ReusableDayListCard(
                         dateInput: futureDate,
-                        index: dayPageList.length,
+                        indexRDLC: dayPageList.length,
                       ),
                     );
                   });

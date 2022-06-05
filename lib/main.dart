@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:offic3/consts,%20globals/constants_globals.dart';
 import 'package:offic3/screens/welcome_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:offic3/providers/productinfo_provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (_) => ProductInfoProvider())
+    ],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {

@@ -3,11 +3,12 @@ import 'package:offic3/consts,%20globals/constants_globals.dart';
 import 'package:offic3/screens/client_screen.dart';
 
 class ReusableClientListCard extends StatelessWidget {
-  const ReusableClientListCard({Key? key, required this.clientNameInput, required this.index2})
+  const ReusableClientListCard({Key? key, required this.clientNameInput, required this.indexRCLC})
       : super(key: key);
 
   final String clientNameInput;
-  final int index2;
+  //index for reusable client list card.
+  final int indexRCLC;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class ReusableClientListCard extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => ClientScreen(
-              index3: index2,
+              indexCS: indexRCLC,
               clientName: clientNameInput,
             ),
           ),

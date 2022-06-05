@@ -5,10 +5,11 @@ import 'package:offic3/reusables/reusable_clientlistcard.dart';
 
 class ClientListScreen extends StatefulWidget {
   const ClientListScreen(
-      {Key? key, required this.index2, required this.dateForClientScreen})
+      {Key? key, required this.indexCLS, required this.dateForClientScreen})
       : super(key: key);
 
-  final int index2;
+  //index of the client list screen.
+  final int indexCLS;
   final String dateForClientScreen;
 
   @override
@@ -47,7 +48,7 @@ class _PrimaryScreenState extends State<ClientListScreen> {
                     clientOverviewList.add(
                       ReusableClientListCard(
                         clientNameInput: futureClient,
-                        index2: clientOverviewList.length,
+                        indexRCLC: clientOverviewList.length,
                       ),
                     );
                   });

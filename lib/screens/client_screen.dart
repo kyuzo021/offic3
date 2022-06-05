@@ -2,12 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:offic3/consts,%20globals/constants_globals.dart';
 import 'package:offic3/reusables/reusable_clientcard.dart';
+import 'package:provider/provider.dart';
+import 'package:offic3/providers/productinfo_provider.dart';
 
 class ClientScreen extends StatefulWidget {
-  const ClientScreen({Key? key, required this.index3, required this.clientName})
+  ClientScreen({Key? key, required this.indexCS, required this.clientName})
       : super(key: key);
-
-  final int index3;
+  //index for client screen.
+  final int indexCS;
   final String clientName;
 
   @override
@@ -17,48 +19,46 @@ class ClientScreen extends StatefulWidget {
 class _PrimaryScreenState extends State<ClientScreen> {
   //variable for is bill paid button.
   late bool isBillPaid = false;
-
-  late double totalCheck = 0;
-
-  void sumCheck(double value) {
-    totalCheck += value;
-    setState(() {});
-  }
-
-  //client list that is getting printed on the screen.
-  List<ReusableClientCard> clientList = [];
+  List<ReusableClientCard> productList = [];
 
   //variables for floating action button.
   late String productName;
   late String productPrice;
 
-  //method for clientcard's delete button to work.
+  // method for reusable_clientcard's delete button to work.
   void deleteReusable(final int index) {
-    if (clientList.isNotEmpty) {
-      clientList.removeAt(index);
-      for (int i = index; i < clientList.length; i++) {
-        clientList[i].indexForclientcard = clientList[i].indexForclientcard - 1;
+    if (productList.isNotEmpty) {
+      productList.removeAt(index);
+      for (int i = index; i < productList.length; i++) {
+        productList[i].indexCC = productList[i].indexCC - 1;
       }
       setState(() {});
     }
   }
 
   //This adds tea and water automatically when the screen gets created.
+  @override
   void initState() {
-    clientList.add(ReusableClientCard(
-      productname: "TEA",
-      unitprice: 2,
-      indexForclientcard: clientList.length,
-      delete: deleteReusable,
-      totalpricefunc: sumCheck,
-    ));
-    clientList.add(ReusableClientCard(
-      productname: "WATER",
-      unitprice: 1,
-      indexForclientcard: clientList.length,
-      delete: deleteReusable,
-      totalpricefunc: sumCheck,
-    ));
+    context.read<ProductInfoProvider>().createClientScreen(widget.indexCS);
+    productList.add(
+      ReusableClientCard(
+        productname: "TEA",
+        delete: deleteReusable,
+        indexCC: productList.length,
+        indexCC2: widget.indexCS,
+      ),
+    );
+    context.read<ProductInfoProvider>().addProduct(widget.indexCS, 2);
+
+    productList.add(
+      ReusableClientCard(
+        productname: "WATER",
+        delete: deleteReusable,
+        indexCC: productList.length,
+        indexCC2: widget.indexCS,
+      ),
+    );
+    context.read<ProductInfoProvider>().addProduct(widget.indexCS, 1);
   }
 
   @override
@@ -87,7 +87,11 @@ class _PrimaryScreenState extends State<ClientScreen> {
                   TextField(
                     keyboardType: TextInputType.text,
                     onChanged: (String value) {
-                      productName = value;
+                      setState(
+                        () {
+                          productName = value;
+                        },
+                      );
                     },
                     decoration:
                         const InputDecoration(labelText: 'Product\'s name.'),
@@ -95,9 +99,11 @@ class _PrimaryScreenState extends State<ClientScreen> {
                   TextField(
                     keyboardType: TextInputType.number,
                     onChanged: (String value) {
-                      setState(() {
-                        productPrice = value;
-                      });
+                      setState(
+                        () {
+                          productPrice = value;
+                        },
+                      );
                     },
                     decoration:
                         const InputDecoration(labelText: 'Product\'s price.'),
@@ -107,17 +113,19 @@ class _PrimaryScreenState extends State<ClientScreen> {
               actions: [
                 TextButton(
                   onPressed: () {
-                    setState(() {
-                      clientList.add(
-                        ReusableClientCard(
-                          productname: productName,
-                          unitprice: double.parse(productPrice),
-                          indexForclientcard: clientList.length,
-                          delete: deleteReusable,
-                          totalpricefunc: sumCheck,
-                        ),
-                      );
-                    });
+                    setState(
+                      () {
+                        productList.add(
+                          ReusableClientCard(
+                            productname: productName,
+                            delete: deleteReusable,
+                            indexCC: productList.length,
+                            indexCC2: widget.indexCS,
+                          ),
+                        );
+                        context.read<ProductInfoProvider>().addProduct(widget.indexCS, int.parse(productPrice));
+                      },
+                    );
                     Navigator.pop(context);
                   },
                   child: const Text('Create'),
@@ -149,8 +157,8 @@ class _PrimaryScreenState extends State<ClientScreen> {
                   const SizedBox(height: 1),
                   const Text('Overview', style: kStandardTextStyle2),
                   const SizedBox(height: 3),
-                  Text(
-                    'Client\'s Total Check: ${totalCheck.toStringAsFixed(2)} \$',
+                  const Text(
+                    'Client\'s Total Check: -',
                     style: kStandardTextStyle2,
                   ),
                   const SizedBox(height: 3),
@@ -197,7 +205,7 @@ class _PrimaryScreenState extends State<ClientScreen> {
             Expanded(
               child: GridView.count(
                 crossAxisCount: 2,
-                children: [...clientList],
+                children: [...productList],
               ),
             ),
           ],

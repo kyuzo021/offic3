@@ -1,14 +1,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:offic3/consts,%20globals/constants_globals.dart';
-import 'package:offic3/screens/clientlist_screen.dart';
+import 'package:offic3/screens/clientList_screen.dart';
 
 class ReusableDayListCard extends StatelessWidget {
-  const ReusableDayListCard({Key? key, required this.dateInput, required this.index})
+  const ReusableDayListCard({Key? key, required this.dateInput, required this.indexRDLC})
       : super(key: key);
 
   final String dateInput;
-  final int index;
+  //index of reusable day list card.
+  final int indexRDLC;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,7 @@ class ReusableDayListCard extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => ClientListScreen(
-              index2: index,
+              indexCLS: indexRDLC,
               dateForClientScreen: dateInput,
             ),
           ),
