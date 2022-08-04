@@ -2,6 +2,7 @@ import 'package:offic3/reusables/reusable_daylistcard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:offic3/consts,%20globals/constants_globals.dart';
+import 'package:offic3/hive/hive_dayList_screen.dart';
 
 class DayListScreen extends StatefulWidget {
   const DayListScreen({Key? key}) : super(key: key);
@@ -11,9 +12,23 @@ class DayListScreen extends StatefulWidget {
 }
 
 class _PrimaryScreenState extends State<DayListScreen> {
-
   late String futureDate;
   List<ReusableDayListCard> dayPageList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    initiate();
+  }
+
+  void initiate() async {
+    Iterable values = await dataRetriever();
+    for (String x in values) {
+      dayPageList.add(ReusableDayListCard(
+          dateInput: x.toString(), indexRDLC: dayPageList.length));
+    }
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +67,7 @@ class _PrimaryScreenState extends State<DayListScreen> {
                         indexRDLC: dayPageList.length,
                       ),
                     );
+                    addData(dayPageList.length, futureDate);
                   });
                 },
                 decoration:

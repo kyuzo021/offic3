@@ -1,16 +1,21 @@
+
 import 'package:flutter/material.dart';
 import 'package:offic3/consts,%20globals/constants_globals.dart';
 import 'package:offic3/screens/welcome_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:offic3/providers/productinfo_provider.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-void main() {
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider(create: (_) => ProductInfoProvider())
-    ],
-    child: const MyApp(),
-  ));
+void main() async{
+  await Hive.initFlutter();
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ProductInfoProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -23,7 +28,22 @@ class MyApp extends StatelessWidget {
         primaryColor: kColor1,
         scaffoldBackgroundColor: kColor1,
       ),
-      home: const WelcomeScreen(),
+      home: FutureBuilder(
+        future: Hive.openBox('dayList_screen'),
+        builder: (context, snapshot) {
+          if(snapshot.connectionState == ConnectionState.done) {
+            if(snapshot.hasError) {
+              return Text(snapshot.error.toString());
+            } else {
+              return const WelcomeScreen();
+            }
+          } else {
+            return const Scaffold(
+              backgroundColor: kColor1,
+            );
+          }
+        },
+      ),
     );
   }
 }
