@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 //Colors:
 const kColor1 = Color(0xFF171717);
 const kColor2 = Color(0xFF444444);
 const kColor3 = Color(0xFFDA0037);
 const kColor4 = Color(0xFFEDEDED);
+const kColor5 = Colors.greenAccent;
+const kColor6 = Colors.pinkAccent;
 
 
 const kStandardPadding = EdgeInsetsDirectional.only(
   top: 8.0,
   bottom: 8.0,
-  start: 20.0,
+  start: 5,
+  end: 5,
 );
 
 const kStandardEdging = EdgeInsets.only(top: 5.0, bottom: 5.0, left: 5.0, right: 5.0,);
@@ -74,6 +76,16 @@ const kStandardTextStyle3 = TextStyle(
   color: kColor4,
 );
 
+const kStandardTextStyle3X = TextStyle(
+  fontFamily: 'SourceCodePro',
+  fontSize: 17,
+  fontWeight: FontWeight.bold,
+  color: Colors.greenAccent,
+);
 
-
-
+const kStandardTextStyle3XX = TextStyle(
+  fontFamily: 'SourceCodePro',
+  fontSize: 17,
+  fontWeight: FontWeight.bold,
+  color: Colors.pinkAccent,
+);

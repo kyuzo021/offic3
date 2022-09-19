@@ -1,17 +1,12 @@
 
 import 'package:hive_flutter/hive_flutter.dart';
 
-void addData(int _x, String _y) async{
+void addDataForDayListScreen(int x, String y) async{
   final dayListData = Hive.box('dayList_screen');
-  await dayListData.put(_x, _y);
+  await dayListData.put(x, y);
 }
 
-dataLengthRetriever() async{
-  final dayListData2 = Hive.box('dayList_screen');
-  return dayListData2.values.length;
-}
-
-Future<Iterable> dataRetriever() async{
+Future<Iterable> dataRetrieverForDayListScreen() async{
   final dayListData2 = Hive.box('dayList_screen');
   return dayListData2.values;
 }

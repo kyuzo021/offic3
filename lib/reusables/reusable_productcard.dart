@@ -1,33 +1,38 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:offic3/consts,%20globals/constants_globals.dart';
-import 'package:offic3/providers/productinfo_provider.dart';
+import 'package:offic3/providers/productdata_provider.dart';
 import 'package:provider/provider.dart';
 
-class ReusableClientCard extends StatefulWidget {
-  ReusableClientCard({
+class ReusableProductCard extends StatefulWidget {
+  ReusableProductCard({
     Key? key,
     required this.productname,
     required this.delete,
-    required this.indexCC,
-    //indexCS == indexCC2
-    required this.indexCC2,
+    required this.indexPC,
+    required this.indexCS,
+    required this.indexCLS,
   }) : super(key: key);
 
-  //this index points out the position of the reusable_client_card's at client_screen gridview.
-  int indexCC;
-  //this index makes us understand which client's product it is. indexCS == indexCC2
-  final int indexCC2;
+  //this index points out the position of the reusable_productcard at client_screen gridview.
+  int indexPC;
+  //this index makes us understand which client's product it is.
+  final int indexCS;
+  final int indexCLS;
   final String productname;
   final void Function(int) delete;
 
   @override
-  State<ReusableClientCard> createState() => _ReusableClientCardState();
+  State<ReusableProductCard> createState() => _ReusableProductCardState();
 }
 
-class _ReusableClientCardState extends State<ReusableClientCard> {
+class _ReusableProductCardState extends State<ReusableProductCard> {
   @override
   Widget build(BuildContext context) {
+
+    int totalPrice = context.watch<ProductDataProvider>().productCountGetter(widget.indexCLS, widget.indexCS, widget.indexPC) * context.watch<ProductDataProvider>().productPriceGetter(widget.indexCLS, widget.indexCS, widget.indexPC);
+
+
     return Container(
       margin: const EdgeInsetsDirectional.all(6),
       padding: const EdgeInsetsDirectional.only(
@@ -45,18 +50,18 @@ class _ReusableClientCardState extends State<ReusableClientCard> {
                 color: kColor1, borderRadius: BorderRadius.circular(10)),
             padding: const EdgeInsetsDirectional.all(5),
             child: Text(
-              "${widget.productname} - ${context.read<ProductInfoProvider>().productPriceGetter(widget.indexCC2, widget.indexCC)}\$",
+              "${widget.productname} - ${context.watch<ProductDataProvider>().productPriceGetter(widget.indexCLS, widget.indexCS, widget.indexPC)}\$",
               style: kStandardTextStyle3,
             ),
           ),
           const SizedBox(height: 7),
           Text(
-            "Count: ${context.watch<ProductInfoProvider>().productCountGetter(widget.indexCC2, widget.indexCC)}",
+            "Count: ${context.watch<ProductDataProvider>().productCountGetter(widget.indexCLS, widget.indexCS, widget.indexPC)}",
             style: kStandardTextStyle4,
           ),
           const SizedBox(height: 7),
           Text(
-            "Total Price: ${context.watch<ProductInfoProvider>().productCountGetter(widget.indexCC2, widget.indexCC) * context.read<ProductInfoProvider>().productPriceGetter(widget.indexCC2, widget.indexCC)}\$",
+            "Total Price: $totalPrice\$",
             style: kStandardTextStyle4,
           ),
           const SizedBox(height: 5),
@@ -70,9 +75,10 @@ class _ReusableClientCardState extends State<ReusableClientCard> {
             child: Row(
               children: [
                 TextButton(
-                  onPressed: () => context
-                      .read<ProductInfoProvider>()
-                      .incrementCount(widget.indexCC2, widget.indexCC),
+                  onPressed: () {
+                    context
+                      .read<ProductDataProvider>().incrementCount(widget.indexCLS, widget.indexCS, widget.indexPC);
+                  },
                   child: const Icon(
                     CupertinoIcons.add_circled_solid,
                     color: kColor4,
@@ -83,9 +89,11 @@ class _ReusableClientCardState extends State<ReusableClientCard> {
                   ),
                 ),
                 TextButton(
-                  onPressed: () => context
-                      .read<ProductInfoProvider>()
-                      .decrementCount(widget.indexCC2, widget.indexCC),
+                  onPressed: () {
+                    context
+                      .read<ProductDataProvider>()
+                      .decrementCount(widget.indexCLS, widget.indexCS, widget.indexPC);
+                  },
                   child: const Icon(
                     CupertinoIcons.minus_circle,
                     color: kColor4,
@@ -97,10 +105,8 @@ class _ReusableClientCardState extends State<ReusableClientCard> {
                 ),
                 TextButton(
                   onPressed: () {
-                    context
-                        .read<ProductInfoProvider>()
-                        .removeProduct(widget.indexCC2, widget.indexCC);
-                    widget.delete(widget.indexCC);
+                    context.read<ProductDataProvider>().removeProduct(widget.indexCLS, widget.indexCS, widget.indexPC);
+                    widget.delete(widget.indexPC);
                   },
                   child: const Icon(
                     CupertinoIcons.delete,
