@@ -3,15 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:offic3/consts,%20globals/constants_globals.dart';
 import 'package:offic3/screens/welcome_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:offic3/providers/productinfo_provider.dart';
+import 'package:offic3/providers/productdata_provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:offic3/providers/totalprice_provider.dart';
 
 void main() async{
   await Hive.initFlutter();
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => ProductInfoProvider()),
+        ChangeNotifierProvider(create: (_) => ProductDataProvider()),
+        ChangeNotifierProvider(create: (_) => TotalPriceProvider()),
       ],
       child: const MyApp(),
     ),

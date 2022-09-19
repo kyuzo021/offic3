@@ -1,15 +1,20 @@
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:offic3/consts,%20globals/constants_globals.dart';
-import 'package:offic3/reusables/reusable_clientcard.dart';
+import 'package:offic3/reusables/reusable_productcard.dart';
 import 'package:provider/provider.dart';
-import 'package:offic3/providers/productinfo_provider.dart';
+import 'package:offic3/providers/productdata_provider.dart';
+import 'package:offic3/hive/hive_client_screen.dart';
+import 'package:offic3/providers/totalprice_provider.dart';
+// import 'package:hive/hive.dart';
 
 class ClientScreen extends StatefulWidget {
-  ClientScreen({Key? key, required this.indexCS, required this.clientName})
+  const ClientScreen({Key? key, required this.indexCS, required this.clientName, required this.indexCLS})
       : super(key: key);
   //index for client screen.
   final int indexCS;
+  final int indexCLS;
   final String clientName;
 
   @override
@@ -17,185 +22,209 @@ class ClientScreen extends StatefulWidget {
 }
 
 class _PrimaryScreenState extends State<ClientScreen> {
-  //variable for is bill paid button.
-  late bool isBillPaid = false;
-  List<ReusableClientCard> productList = [];
+
+  List<ReusableProductCard> productList = [];
 
   //variables for floating action button.
   late String productName;
   late String productPrice;
 
-  // method for reusable_clientcard's delete button to work.
+  // method for reusable_productcard's delete button to work.
   void deleteReusable(final int index) {
     if (productList.isNotEmpty) {
       productList.removeAt(index);
       for (int i = index; i < productList.length; i++) {
-        productList[i].indexCC = productList[i].indexCC - 1;
+        productList[i].indexPC = productList[i].indexPC - 1;
       }
       setState(() {});
     }
   }
 
-  //This adds tea and water automatically when the screen gets created.
+  // This adds tea and water automatically when the screen gets created.
   @override
   void initState() {
-    context.read<ProductInfoProvider>().createClientScreen(widget.indexCS);
-    productList.add(
-      ReusableClientCard(
-        productname: "TEA",
-        delete: deleteReusable,
-        indexCC: productList.length,
-        indexCC2: widget.indexCS,
-      ),
-    );
-    context.read<ProductInfoProvider>().addProduct(widget.indexCS, 2);
+    super.initState();
+    initiatorForClientScreen();
+  }
 
-    productList.add(
-      ReusableClientCard(
-        productname: "WATER",
-        delete: deleteReusable,
-        indexCC: productList.length,
-        indexCC2: widget.indexCS,
-      ),
-    );
-    context.read<ProductInfoProvider>().addProduct(widget.indexCS, 1);
+  void initiatorForClientScreen() async{
+    Iterable idDataForClientScreen = await retrieveIdDataForClientScreen();
+    List valuesList = idDataForClientScreen.toList();
+    bool result = valuesList.any((element) => element == widget.indexCLS.toString() + widget.indexCS.toString());
+    if(result == false) {
+      context.read<ProductDataProvider>().createClientScreen(widget.indexCLS.toString() + widget.indexCS.toString());
+    }
+    Iterable priceDataForClientScreen = await retrieveProductPriceDataForClientScreen(widget.indexCLS.toString() + widget.indexCS.toString());
+    Iterable countDataForClientScreen = await retrieveProductCountDataForClientScreen(widget.indexCLS.toString() + widget.indexCS.toString());
+    Iterable nameDataForClientScreen = await retrieveProductNameDataForClientScreen(widget.indexCLS.toString() + widget.indexCS.toString());
+    List<dynamic> productInfo = context.read<ProductDataProvider>().productInfoGetter(widget.indexCLS.toString() + widget.indexCS.toString());
+    for(int i = 0; i < priceDataForClientScreen.length; i++){
+      if(productInfo.length != priceDataForClientScreen.length+1) {
+        context.read<ProductDataProvider>().loadProduct(widget.indexCLS, widget.indexCS, priceDataForClientScreen.elementAt(i), countDataForClientScreen.elementAt(i), nameDataForClientScreen.elementAt(i));
+      }
+      productList.add(ReusableProductCard(productname: nameDataForClientScreen.elementAt(i), delete: deleteReusable, indexPC: productList.length, indexCS: widget.indexCS, indexCLS: widget.indexCLS));
+    }
+
+    List<dynamic> priceList = context.read<ProductDataProvider>().productPriceListGetter(widget.indexCLS, widget.indexCS);
+    List<dynamic> countList = context.read<ProductDataProvider>().productCountListGetter(widget.indexCLS, widget.indexCS);
+    context.read<TotalPriceProvider>().totalPriceCalculator(priceList, countList, widget.indexCLS, widget.indexCS);
+
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
+
+    int totalPrice = context.read<TotalPriceProvider>().totalPriceGetter(widget.indexCLS, widget.indexCS);
+
     return Scaffold(
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: kColor3,
-        label: const Text(
-          'Add a Product',
-          style: kStandardTextStyle,
-        ),
-        icon: const Icon(
-          CupertinoIcons.plus,
-          color: kColor4,
-        ),
-        onPressed: () async {
-          await showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (BuildContext context) => AlertDialog(
-              backgroundColor: kColor1,
-              title: const Text('Write the name of the product and the price.'),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  TextField(
-                    keyboardType: TextInputType.text,
-                    onChanged: (String value) {
-                      setState(
-                        () {
-                          productName = value;
-                        },
-                      );
-                    },
-                    decoration:
-                        const InputDecoration(labelText: 'Product\'s name.'),
-                  ),
-                  TextField(
-                    keyboardType: TextInputType.number,
-                    onChanged: (String value) {
-                      setState(
-                        () {
-                          productPrice = value;
-                        },
-                      );
-                    },
-                    decoration:
-                        const InputDecoration(labelText: 'Product\'s price.'),
-                  ),
-                ],
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          SizedBox(
+            height: 70,
+            width: 70,
+            child: FloatingActionButton.extended(
+              heroTag: 'btn1',
+              backgroundColor: kColor3,
+              splashColor: Colors.black54,
+              label: const Icon(
+                CupertinoIcons.cart_fill_badge_plus,
+                color: kColor4,
+                size: 30,
               ),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    setState(
-                      () {
-                        productList.add(
-                          ReusableClientCard(
-                            productname: productName,
-                            delete: deleteReusable,
-                            indexCC: productList.length,
-                            indexCC2: widget.indexCS,
-                          ),
-                        );
-                        context.read<ProductInfoProvider>().addProduct(widget.indexCS, int.parse(productPrice));
-                      },
-                    );
-                    Navigator.pop(context);
-                  },
-                  child: const Text('Create'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text('Cancel'),
-                ),
-              ],
+              onPressed: () async {
+                await showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) => AlertDialog(
+                    backgroundColor: kColor1,
+                    title: const Text('Write the name of the product and the price.'),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TextField(
+                          keyboardType: TextInputType.text,
+                          onChanged: (String value) {
+                            setState(
+                                  () {
+                                productName = value;
+                              },
+                            );
+                          },
+                          decoration:
+                          const InputDecoration(labelText: 'Product\'s name.'),
+                        ),
+                        TextField(
+                          keyboardType: TextInputType.number,
+                          onChanged: (String value) {
+                            setState(
+                                  () {
+                                productPrice = value;
+                              },
+                            );
+                          },
+                          decoration:
+                          const InputDecoration(labelText: 'Product\'s price.'),
+                        ),
+                      ],
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          setState(
+                                () {
+                              productList.add(
+                                ReusableProductCard(
+                                  productname: productName,
+                                  delete: deleteReusable,
+                                  indexPC: productList.length,
+                                  indexCS: widget.indexCS,
+                                  indexCLS: widget.indexCLS,
+                                ),
+                              );
+                              context.read<ProductDataProvider>().addProduct(widget.indexCLS, widget.indexCS, int.parse(productPrice), 0, productName);
+                            },
+                          );
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Create'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Cancel'),
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
-          );
-        },
+          ),
+          const SizedBox(height: 10),
+          SizedBox(
+            height: 70,
+            width: 70,
+            child: FloatingActionButton.extended(
+              heroTag: 'btn2',
+              label: const Icon(CupertinoIcons.doc_checkmark_fill, color: kColor4, size: 30),
+              backgroundColor: Colors.teal,
+              splashColor: Colors.black54,
+              onPressed: () async{
+                await showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return SimpleDialog(
+                        title: Text('Total Price is: $totalPrice\$', style: kStandardTextStyle3XX),
+                        children: const [
+                          SimpleDialogOption(
+                            child: Text('Checked out.', style: kStandardTextStyle3X),
+                            onPressed: null,
+                          ),
+                          SimpleDialogOption(
+                            child: Text('Cancel'),
+                            onPressed: null,
+                          ),
+                        ],
+                      );
+                    }
+                );
+              },
+            ),
+          ),
+        ],
       ),
       body: SafeArea(
         child: Column(
           children: [
             Container(
               alignment: Alignment.topLeft,
-              padding: const EdgeInsets.only(left: 20, top: 20),
+              padding: const EdgeInsets.only(left: 20, top: 20, right: 20),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
-                    'Client: ${widget.clientName}',
-                    style: kLabelTextStyle2,
-                  ),
-                  const SizedBox(height: 1),
-                  const Text('Overview', style: kStandardTextStyle2),
-                  const SizedBox(height: 3),
-                  const Text(
-                    'Client\'s Total Check: -',
-                    style: kStandardTextStyle2,
-                  ),
-                  const SizedBox(height: 3),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text(
-                        "Is Bill paid?:",
-                        style: kStandardTextStyle3,
-                      ),
+                      const Icon(CupertinoIcons.person_crop_rectangle, color: kColor4,),
                       const SizedBox(width: 10),
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            isBillPaid == false
-                                ? isBillPaid = true
-                                : isBillPaid = false;
-                          });
-                        },
-                        child: Text(
-                          isBillPaid == false ? "No" : "Yes",
-                          style: const TextStyle(
-                            fontFamily: 'SourceCodePro',
-                            fontSize: 16,
-                            fontWeight: FontWeight.w900,
-                            color: kColor3,
-                          ),
-                        ),
+                      Text(
+                        widget.clientName,
+                        style: kLabelTextStyle2,
                       ),
-                      const SizedBox(width: 10),
-                      const Text(
-                        "(Click to Change.)",
-                        style: TextStyle(
-                          fontFamily: 'SourceCodePro',
-                          fontSize: 13,
-                          color: kColor4,
-                        ),
-                      ),
+                    ],
+                  ),
+                  const Divider(
+                    thickness: 0.5,
+                    color: kColor4,
+                  ),
+                  const SizedBox(height: 5),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text('Overview', style: kStandardTextStyle2),
+                      Text('TOTAL: $totalPrice\$', style: kStandardTextStyle3X,),
                     ],
                   ),
                   const SizedBox(height: 10),
